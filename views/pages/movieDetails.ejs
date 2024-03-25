@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Tracks | Movie Details</title>
+    <!-- <link rel="stylesheet" href="/styles/styles.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/movieDetails.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <%- include('../common/header')  %>
+    <div class="page_wrapper p-4">
+      <a href="/movies" class="d-flex align-items-center gap-2 mb-4">
+        <img src="/images/backArrow.svg" alt="back arrow icon" />
+        <p class="back_text">back</p>
+      </a>
+      <div class="d-flex align-items-center gap-4 mb-2">
+        <h1 class="heading">Movie Details</h1>
+        <p class="status"><%= movieData.status %></p>
+      </div>
+      <div class="movie_details_wrapper">
+        <div class="movie_image_wrapper">
+          <img
+            src="https://image.tmdb.org/t/p/w200<%= movieData.postarImage %>"
+            alt="Movie poster image"
+            class="movie_image"
+          />
+        </div>
+        <div class="movie_content_wrapper">
+          <p class="movie_name"><%= movieData.title %></p>
+          <p class="movie_description"><%= movieData.description %></p>
+          <div class="d-flex align-items-start gap-5 flex-wrap py-2">
+            <div class="key_value_pair_wrapper">
+              <p class="key_label">Budget</p>
+              <div class="d-flex align-items-center gap-2 pt-1">
+                <img src="/images/money.svg" alt="money icon" />
+                <p class="value_label"><%= movieData.budget %></p>
+              </div>
+            </div>
+            <div class="key_value_pair_wrapper">
+              <p class="key_label">Release Date</p>
+              <div class="d-flex align-items-center gap-2 pt-1">
+                <img src="/images/calendar.svg" alt="release date icon" />
+                <p class="value_label"><%= movieData.releaseDate %></p>
+              </div>
+            </div>
+            <div class="key_value_pair_wrapper">
+              <p class="key_label">Total Votes</p>
+              <div class="d-flex align-items-center gap-2 pt-1">
+                <img src="/images/vote.svg" alt="Total vote icon" />
+                <p class="value_label"><%= movieData.totalVotes %></p>
+              </div>
+            </div>
+            <div class="key_value_pair_wrapper">
+              <p class="key_label">Type</p>
+              <div class="d-flex align-items-center gap-2 pt-1">
+                <p class="value_label"><%= movieData.movieType %></p>
+              </div>
+            </div>
+            <div class="key_value_pair_wrapper">
+              <p class="key_label">Vote Average</p>
+              <div class="d-flex align-items-center gap-2 pt-1">
+                <p class="value_label"><%= movieData.voteAverage %> / 10</p>
+              </div>
+            </div>
+          </div>
+          <div class="genre_text_wrapper">
+            <h4 class="subHeading">Genres</h4>
+            <div class="genre_wrapper">
+              <% for(var i=0; i < movieData.genres.length; i++) { %>
+              <p class="genre"><%= movieData.genres[i] %></p>
+              <% } %>
+            </div>
+          </div>
+          <div class="production_group">
+            <div class="company_wrapper">
+              <h4 class="subHeading">Production Companies</h4>
+              <ul class="pt-2">
+                <% for(var i=0; i < movieData.productionCompanies.length; i++) {
+                %>
+                <li class="list_item">
+                  <%= movieData.productionCompanies[i] %>
+                </li>
+                <% } %>
+              </ul>
+            </div>
+            <div class="country_wrapper">
+              <h4 class="subHeading">Production Countries</h4>
+              <ul class="pt-2">
+                <% for(var i=0; i < movieData.productionCountries.length; i++) {
+                %>
+                <li class="list_item">
+                  <%= movieData.productionCountries[i] %>
+                </li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider" />
+      <div class="albums">
+        <h3 class="subHeading">Related Albums</h3>
+        <p class="helper_text">
+          These are the list of songs related to <%= movieData.title %>
+        </p>
+        <div class="albums_wrapper">
+          <% for(var i=0; i < tracks.length; i++) { %>
+          <div class="mt-4 album_card_wrapper">
+            <div class="album_image_wrapper">
+              <img
+                src="<%= tracks[i].image %>"
+                alt="image url for song"
+                class="album_image"
+              />
+            </div>
+            <div class="album_content_wrapper">
+              <p class="track_name"><%= tracks[i].name %></p>
+              <p class="total_tracks">Total Tracks: <%= tracks[i].totalTracks %></p>
+              <div class="pt-4 d-flex align-items-start gap-4 flex-wrap">
+                <div class="key_value_pair_wrapper">
+                  <p class="key_label">Release Date</p>
+                  <div class="d-flex align-items-center gap-2 pt-1">
+                    <p class="value_label"><%= tracks[i].releaseDate %></p>
+                  </div>
+                </div>
+                <div class="key_value_pair_wrapper">
+                  <p class="key_label">Popularity</p>
+                  <div class="d-flex align-items-center gap-2 pt-1">
+                    <p class="value_label"><%= tracks[i].popularity %></p>
+                  </div>
+                </div>
+              </div>
+              <div class="pt-4">
+                <% if(tracks[i].audioUrl){ %>
+                    <audio controls>
+                        <source src="<%= tracks[i].audioUrl %>" type="audio/ogg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                 <% } %>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <%- include('../common/footer')  %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

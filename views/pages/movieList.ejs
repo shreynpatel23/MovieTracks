@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Tracks | Movie List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/movieList.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <%- include('../common/header')  %>
+    <div class="page_wrapper p-4">
+      <div class="d-flex align-items-center">
+        <h1 class="heading">Movies</h1>
+        <div class="filter_switch_wrapper">
+          <a href="/movies/top_rated" class="<%= topRatedClassNane %>"
+            >Top Rated</a
+          >
+          <a href="/movies/popular" class="<%= popularTabClassName %>"
+            >Popular</a
+          >
+        </div>
+      </div>
+      <div class="movie_list_wrapper">
+        <% for(var i=0; i < movies.length; i++) { %>
+        <div class="movie_card_wrapper">
+          <div class="movie_image_wrapper">
+            <img
+              src="https://image.tmdb.org/t/p/w200<%= movies[i].backDropImage %>"
+              alt="movie backdrop image"
+              class="movie_image"
+            />
+          </div>
+          <div class="movie_content_wrapper">
+            <h5 class="movie_name" title="<%= movies[i].title %>">
+              <%= movies[i].title %>
+            </h5>
+            <p
+              class="card-text movie_description"
+              title="<%= movies[i].description %>"
+            >
+              <%= movies[i].description %>
+            </p>
+            <div class="d-flex align-items-start gap-4 flex-wrap py-3">
+              <div class="key_value_pair_wrapper">
+                <p class="key_label">Release Date</p>
+                <div class="d-flex align-items-center gap-2 pt-1">
+                  <img src="/images/calendar.svg" alt="release date icon" />
+                  <p class="value_label"><%= movies[i].releaseDate %></p>
+                </div>
+              </div>
+              <div class="key_value_pair_wrapper">
+                <p class="key_label">Release Date</p>
+                <div class="d-flex align-items-center gap-2 pt-1">
+                  <img src="/images/vote.svg" alt="Total vote icon" />
+                  <p class="value_label"><%= movies[i].totalVotes %></p>
+                </div>
+              </div>
+              <div class="key_value_pair_wrapper">
+                <p class="key_label">Type</p>
+                <div class="d-flex align-items-center gap-2 pt-1">
+                  <p class="value_label"><%= movies[i].movieType %></p>
+                </div>
+              </div>
+              <div class="key_value_pair_wrapper">
+                <p class="key_label">Vote Average</p>
+                <div class="d-flex align-items-center gap-2 pt-1">
+                  <p class="value_label"><%= movies[i].voteAverage %> / 10</p>
+                </div>
+              </div>
+            </div>
+            <a href="/movie/<%= movies[i].id %>" class="btn btn-primary my-2"
+              >View Details</a
+            >
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <%- include('../common/footer')  %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
