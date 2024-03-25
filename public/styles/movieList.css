@@ -132,6 +132,21 @@ body {
     margin: 0;
 }
 
+.page-link {
+    border: 0 !important;
+    color: #3B8DEE !important;
+    padding: 0.5em 0.8em !important;
+}
+
+.active {
+    background-color: #3B8DEE !important;
+    border-radius: 8px !important;
+}
+
+.active > .page-link {
+    color: #fff !important;
+}
+
 @media screen and (max-width: 850px) {
     .page_wrapper {
         width: 100%;

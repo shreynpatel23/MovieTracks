@@ -3,7 +3,6 @@ const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 const axios = require("axios");
-// const { MongoClient, ObjectId } = require("mongodb");
 
 // configure dotenv to use the env variables
 dotenv.config();
@@ -12,8 +11,6 @@ dotenv.config();
 const app = express();
 // get port or add default port
 const port = process.env.PORT || 3000;
-// get db url from env or set as empty string
-// const DB_URL = process.env.DB_URL || "";
 
 // configure the views folder for rendering the views
 app.set("views", path.join(__dirname, "views"));
@@ -28,44 +25,37 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// connect to the database url
-// const client = new MongoClient(DB_URL);
-
 //Render the home page
 app.get("/", (_, res) => {
   res.render("./pages/index");
 });
 
-// render the list of genres of the movies
-// app.get("/genres", async (req, res) => {
-//   const url = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-//   const options = {
-//     method: "GET",
-//     headers: {
-//       accept: "application/json",
-//       Authorization:
-//         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmM2RkMWRjNWYwMWJiMWVkNjE3OWM3YWZkYTY0ZTdhMyIsInN1YiI6IjY1ZTc4NDAyY2U5ZTkxMDE2MjNkZmYzNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0bDr4XMOz5LqAawdDcTS-C76-spnhht8hdRFD7ajT1M",
-//     },
-//   };
-
-//   fetch(url, options)
-//     .then((res) => res.json())
-//     .then((json) => console.log(json))
-//     .catch((err) => console.error("error:" + err));
-// });
-
+// if the url consist only movies
+// redirect it to top_rated movies
 app.get("/movies", (_, res) => {
-  res.redirect("/movies/top_rated");
+  res.redirect("/movies/top_rated/1");
 });
 
-// render the list of genres of the movies
-app.get("/movies/:movieCategory", async (req, res) => {
-  // get the type of movie list the user want from query params
-  const { movieCategory } = req.params;
+// render the list of movies based on category
+// category can be either top_rated or popular
+app.get("/movies/:movieCategory/:page", async (req, res) => {
+
+  // because The total number of pages that the movies database is sending is large
+  // I am limitting the total number of pages to 10 here
+  const totalPages = 10;
+
+  // get the type of movie list the user want and the current page number from query params
+  const { movieCategory, page } = req.params;
+
   // get the list of all movies order by popularity
-  const { formatedMoviesData: movies } = await getMovies(movieCategory, 1);
+  const { formatedMoviesData: movies } = await getMovies(movieCategory, page);
+
+  // render the movies list
   res.render("./pages/movieList", {
+    paginationUrl: `/movies/${movieCategory}`,
     movies,
+    totalPages,
+    currentPage: Number(page),
     topRatedClassNane:
       movieCategory === "top_rated" ? "active_filter" : "filter",
     popularTabClassName:
@@ -73,6 +63,7 @@ app.get("/movies/:movieCategory", async (req, res) => {
   });
 });
 
+// render the details of the movie
 app.get("/movie/:movieId", async (req, res) => {
   const { movieId } = req.params;
   const movieApiUrl = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
@@ -113,6 +104,7 @@ app.listen(port, () =>
   console.log(`App listening to http://localhost:${port}`)
 );
 
+// get all movies based on the category and page number
 async function getMovies(type, page) {
   // get the list of all movies order by popularity
   const movieApiUrl = `https://api.themoviedb.org/3/movie/${type}?language=en-US&page=${page}&region=CAN`;
@@ -138,6 +130,7 @@ async function getMovies(type, page) {
   return { formatedMoviesData };
 }
 
+// get access token for spotify apis
 async function getAccessToken() {
   const url = "https://accounts.spotify.com/api/token";
   const response = await fetch(url, {
@@ -159,6 +152,8 @@ async function getAccessToken() {
 
   return await response.json();
 }
+
+// fetch all the related tracks for a particular movie
 async function getAllTracks(search) {
   const { access_token } = await getAccessToken();
   const { data } = await axios.get(
