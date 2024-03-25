@@ -1,0 +1,36 @@
+.background-image {
+    background-image: url('/images/movies-back.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 85vh;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tagline {
+    max-width: 500px; 
+    width: 100%; 
+    margin: 0 auto 1.5em;
+    font-weight: 500;
+}
+
+.btn {
+    border-radius: 10px !important;
+    padding: 0.5em 2em !important;
+}
+
+.btn-primary {
+    background-color: #3b8dee !important;
+    border: 1px solid #3b8dee !important;
+}
+
+.btn-primary:hover {
+    background-color: #214a75 !important;
+    border: 1px solid #214a75 !important;
+}
